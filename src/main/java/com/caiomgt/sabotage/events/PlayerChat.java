@@ -10,6 +10,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -30,7 +31,18 @@ public class PlayerChat implements Listener {
             Set<OfflinePlayer> sabs = Teams.sabs.getPlayers();
             event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
             event.getRecipients().removeAll(sabs);
-
+            Iterator<OfflinePlayer> iter = sabs.iterator();
+            while (iter.hasNext()) {
+                ChatColor color;
+                if (plrTeam.equals(Teams.innos)){
+                    color = ChatColor.GREEN;
+                } else if(plrTeam.equals(Teams.sabs)) {
+                    color = ChatColor.RED;
+                } else {
+                    color = ChatColor.YELLOW;
+                }
+                iter.next().getPlayer().sendMessage(color + "<" + plr.getName() + "> " + ChatColor.RESET + event.getMessage());
+            }
         }
     }
 }
