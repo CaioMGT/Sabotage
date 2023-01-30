@@ -1,0 +1,7 @@
+name: Sabotage
+version: '${project.version}'
+main: com.caiomgt.sabotage.Sabotage
+api-version: 1.19
+prefix: SABOTAGE
+authors: [ Caio_MGT ]
+description: Re-Creation of MCPvp's Sabotage minigame
