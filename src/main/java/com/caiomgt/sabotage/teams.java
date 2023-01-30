@@ -22,4 +22,9 @@ public class teams {
             dets.setColor(ChatColor.BLUE);
         }
     }
+    public void cleanup(){
+        sabs.unregister();
+        dets.unregister();
+        innos.unregister();
+    }
 }

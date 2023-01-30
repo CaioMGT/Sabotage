@@ -23,7 +23,8 @@ public final class Sabotage extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        // Clean up teams
         console.sendMessage("[SABOTAGE] Stopping Sabotage");
+        teams.cleanup();
     }
 }
