@@ -23,7 +23,7 @@ public class PlayerChat implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player plr = event.getPlayer();
-        Team plrTeam = plr.getScoreboard().getPlayerTeam(plr);
+        Team plrTeam = plr.getScoreboard().getEntityTeam(plr);
         if (plrTeam.equals(Teams.dets)) {
             event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
         } else {
