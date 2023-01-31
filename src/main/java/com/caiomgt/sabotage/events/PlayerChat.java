@@ -1,5 +1,6 @@
 package com.caiomgt.sabotage.events;
 
+import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.teams;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -17,31 +18,34 @@ import java.util.Set;
 public class PlayerChat implements Listener {
     Plugin plugin;
     teams Teams;
-    public PlayerChat(Plugin plugin, teams teams){
+    GameManager manager;
+    public PlayerChat(Plugin plugin, teams teams, GameManager manager){
         this.plugin = plugin;
         this.Teams = teams;
+        this.manager = manager;
     }
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         Player plr = event.getPlayer();
         Team plrTeam = plr.getScoreboard().getEntityTeam(plr);
-        if (plrTeam.equals(Teams.dets)) {
-            event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
-        } else {
-            Set<OfflinePlayer> sabs = Teams.sabs.getPlayers();
-            event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
-            event.getRecipients().removeAll(sabs);
-            Iterator<OfflinePlayer> iter = sabs.iterator();
-            while (iter.hasNext()) {
-                ChatColor color;
-                if (plrTeam.equals(Teams.innos)){
-                    color = ChatColor.GREEN;
-                } else if(plrTeam.equals(Teams.sabs)) {
-                    color = ChatColor.RED;
-                } else {
-                    color = ChatColor.YELLOW;
+        if (manager.gameStarted){
+            if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
+                event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
+            } else {
+                Set<OfflinePlayer> sabs = Teams.sabs.getPlayers();
+                event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
+                event.getRecipients().removeAll(sabs);
+                for (OfflinePlayer sab : sabs) {
+                    ChatColor color;
+                    if (plrTeam.equals(Teams.innos)){
+                        color = ChatColor.GREEN;
+                    } else if(plrTeam.equals(Teams.sabs)) {
+                        color = ChatColor.RED;
+                    } else {
+                        color = ChatColor.YELLOW;
+                    }
+                    sab.getPlayer().sendMessage(color + "<" + plr.getName() + "> " + ChatColor.RESET + event.getMessage());
                 }
-                iter.next().getPlayer().sendMessage(color + "<" + plr.getName() + "> " + ChatColor.RESET + event.getMessage());
             }
         }
     }
