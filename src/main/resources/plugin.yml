@@ -5,3 +5,16 @@ api-version: 1.19
 prefix: SABOTAGE
 authors: [ Caio_MGT ]
 description: Re-Creation of MCPvp's Sabotage minigame
+commands:
+  saboteur:
+    description: Gives you higher chances to become a saboteur
+    usage: /<command>
+    aliases: sab
+  detective:
+    description: Gives you higher chances to become detective.
+    usage: /<command>
+    aliases: det
+  innocent:
+    description: Guarantees you to become innocent.
+    usage: /<command>
+    aliases: inno
