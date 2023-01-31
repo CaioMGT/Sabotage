@@ -18,3 +18,7 @@ commands:
     description: Guarantees you to become innocent.
     usage: /<command>
     aliases: inno
+  forcestart:
+    description: Force starts the game
+    usage: /<command>
+    aliases: /fs

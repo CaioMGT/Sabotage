@@ -33,16 +33,14 @@ public class CommandHandler implements CommandExecutor {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equals("saboteur")) {
-            if (checkPerms(sender)) {
+        if (checkPerms(sender)) {
+            if (command.getName().equals("saboteur")) {
                 Player plr = (Player) sender;
                 if (manager.AddSab(plr)) {
                     plr.addScoreboardTag("forcePicked");
                 }
             }
-        }
-        if (command.getName().equals("detective")) {
-            if (checkPerms(sender)) {
+            if (command.getName().equals("detective")) {
                 Player plr = (Player) sender;
                 if (!manager.AddDet(plr)) {
                     plr.sendMessage(ChatColor.YELLOW + "Could not add you as a detective due to there not being enough players.");
@@ -50,14 +48,23 @@ public class CommandHandler implements CommandExecutor {
                     plr.addScoreboardTag("forcePicked");
                 }
             }
-        }
-        if (command.getName().equals("innocent")) {
-            if (checkPerms(sender)) {
+            if (command.getName().equals("innocent")) {
                 Player plr = (Player) sender;
                 manager.AddInno(plr);
                 plr.addScoreboardTag("forcePicked");
             }
+            if (command.getName().equals("forcestart")) {
+                Player plr = (Player) sender;
+                if (!manager.gameStarted) {
+                    manager.Start(plr.getWorld());
+                } else {
+                    plr.sendMessage("Could not start game, game already started.");
+                }
+            }
+        } else {
+            sender.sendMessage("You do not have permissions for this command.");
         }
+
         return true;
     }
 }

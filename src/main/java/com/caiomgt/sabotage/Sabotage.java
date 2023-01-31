@@ -23,6 +23,7 @@ public final class Sabotage extends JavaPlugin {
         getCommand("saboteur").setExecutor(exec);
         getCommand("innocent").setExecutor(exec);
         getCommand("detective").setExecutor(exec);
+        getCommand("forcestart").setExecutor(exec);
         manager.registerEvents(new PlayerJoin(), this);
         manager.registerEvents(new PlayerChat(this, teams), this);
     }

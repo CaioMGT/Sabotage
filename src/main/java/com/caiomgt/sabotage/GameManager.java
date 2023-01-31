@@ -4,6 +4,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,11 +25,19 @@ public class GameManager {
             plrs.removeAll(sabs);
             plrs.removeAll(innos);
             plrs.removeAll(dets);
-            Iterator<Player> iter = plrs.iterator();
+            Collections.shuffle(plrs);
             int sabCount = plrs.size() / 3;
-            while (iter.hasNext()) {
-                Player plr = iter.next();
-                //how should I pick roles?
+            int detCount = plrs.size() / 8;
+            for (Player plr : plrs) {
+                if (detCount >= 1) {
+                    detCount--;
+                    AddDet(plr);
+                } else if (sabCount >= 1) {
+                    sabCount--;
+                    AddSab(plr);
+                } else {
+                    AddInno(plr);
+                }
             }
             gameStarted = true;
             return true;
@@ -45,7 +54,7 @@ public class GameManager {
         return true;
     }
     public boolean AddDet(Player plr) {
-        if (plr.getWorld().getPlayerCount() <= 6) {
+        if (plr.getWorld().getPlayerCount() <= 8) {
             return false;
         }
         dets.add(plr);
