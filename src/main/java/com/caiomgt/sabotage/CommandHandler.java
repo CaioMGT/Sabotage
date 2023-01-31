@@ -22,10 +22,14 @@ public class CommandHandler implements CommandExecutor {
         }
         return true;
     }
-    boolean checkPerms(CommandSender sender) {
+    boolean checkPerms(CommandSender sender, boolean checkTag) {
         if (sender instanceof Player) {
             Player plr = (Player) sender;
-            if (checkTags(plr)) {
+            if (checkTag) {
+                if (checkTags(plr)) {
+                    return plr.isOp();
+                }
+            } else {
                 return plr.isOp();
             }
         }
@@ -33,38 +37,40 @@ public class CommandHandler implements CommandExecutor {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (checkPerms(sender)) {
-            if (command.getName().equals("saboteur")) {
-                Player plr = (Player) sender;
-                if (manager.AddSab(plr)) {
-                    plr.addScoreboardTag("forcePicked");
-                }
-            }
-            if (command.getName().equals("detective")) {
-                Player plr = (Player) sender;
-                if (!manager.AddDet(plr)) {
-                    plr.sendMessage(ChatColor.YELLOW + "Could not add you as a detective due to there not being enough players.");
-                } else {
-                    plr.addScoreboardTag("forcePicked");
-                }
-            }
-            if (command.getName().equals("innocent")) {
-                Player plr = (Player) sender;
-                manager.AddInno(plr);
-                plr.addScoreboardTag("forcePicked");
-            }
-            if (command.getName().equals("forcestart")) {
+        if (command.getName().equals("forcestart")) {
+            if (checkPerms(sender, false)) {
                 Player plr = (Player) sender;
                 if (!manager.gameStarted) {
                     manager.Start(plr.getWorld());
                 } else {
-                    plr.sendMessage("Could not start game, game already started.");
+                    plr.sendMessage(ChatColor.YELLOW + "Could not start game, game already started.");
                 }
             }
         } else {
-            sender.sendMessage("You do not have permissions for this command.");
+            if (checkPerms(sender, true)) {
+                if (command.getName().equals("saboteur")) {
+                    Player plr = (Player) sender;
+                    if (manager.AddSab(plr)) {
+                        plr.addScoreboardTag("forcePicked");
+                    }
+                }
+                if (command.getName().equals("detective")) {
+                    Player plr = (Player) sender;
+                    if (!manager.AddDet(plr)) {
+                        plr.sendMessage(ChatColor.YELLOW + "Could not add you as a detective due to there not being enough players.");
+                    } else {
+                        plr.addScoreboardTag("forcePicked");
+                    }
+                }
+                if (command.getName().equals("innocent")) {
+                    Player plr = (Player) sender;
+                    manager.AddInno(plr);
+                    plr.addScoreboardTag("forcePicked");
+                }
+            } else {
+                sender.sendMessage(ChatColor.YELLOW + "You do not have permissions for this command.");
+            }
         }
-
         return true;
     }
 }

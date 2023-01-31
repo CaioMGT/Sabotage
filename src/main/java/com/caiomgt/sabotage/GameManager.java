@@ -1,8 +1,11 @@
 package com.caiomgt.sabotage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,5 +67,8 @@ public class GameManager {
         teams.dets.addPlayer(plr);
         dets.add(plr);
         return true;
+    }
+    public void cleanup() {
+        teams.cleanup();
     }
 }

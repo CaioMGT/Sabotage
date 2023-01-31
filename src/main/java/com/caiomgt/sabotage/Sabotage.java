@@ -32,6 +32,6 @@ public final class Sabotage extends JavaPlugin {
     public void onDisable() {
         // Clean up teams
         console.sendMessage("[SABOTAGE] Stopping Sabotage");
-        teams.cleanup();
+        GameManager.cleanup();
     }
 }

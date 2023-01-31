@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.Team;
 public class PlayerJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+
     }
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
@@ -18,5 +19,6 @@ public class PlayerJoin implements Listener {
         if (!(plrTeam == null)) {
             plr.getScoreboard().getPlayerTeam(plr).removePlayer(plr);
         }
+        plr.getScoreboardTags().clear();
     }
 }
