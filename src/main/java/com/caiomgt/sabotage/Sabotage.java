@@ -18,7 +18,6 @@ public final class Sabotage extends JavaPlugin {
     ConsoleCommandSender console = server.getConsoleSender();
     PluginManager manager = server.getPluginManager();
     public teams teams = new teams();
-    ProtocolManager protocolManager;
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -27,15 +26,6 @@ public final class Sabotage extends JavaPlugin {
         // Register Events
         manager.registerEvents(new PlayerJoin(), this);
         manager.registerEvents(new PlayerChat(this, teams), this);
-
-        // Manage Tablist Packet
-        protocolManager = ProtocolLibrary.getProtocolManager();
-        protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER) {
-            @Override
-            public void onPacketReceiving(PacketEvent event){
-                console.sendMessage("Received packet: " + event.getPacket().getStringArrays().toString());
-            }
-        });
     }
 
     @Override
