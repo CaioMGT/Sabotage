@@ -32,6 +32,9 @@ public class GameManager {
             plrs.removeAll(dets);
             Collections.shuffle(plrs);
             int sabCount = plrs.size() / 3;
+            if (sabCount < 1) {
+                sabCount = 1;
+            }
             int detCount = plrs.size() / 8;
             for (Player plr : plrs) {
                 if (detCount >= 1) {
