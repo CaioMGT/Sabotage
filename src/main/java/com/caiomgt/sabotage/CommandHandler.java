@@ -26,9 +26,7 @@ public class CommandHandler implements CommandExecutor {
         if (sender instanceof Player) {
             Player plr = (Player) sender;
             if (checkTag) {
-                if (checkTags(plr)) {
-                    return plr.isOp();
-                }
+                return checkTags(plr) && plr.isOp() && !manager.gameStarted;
             } else {
                 return plr.isOp();
             }
