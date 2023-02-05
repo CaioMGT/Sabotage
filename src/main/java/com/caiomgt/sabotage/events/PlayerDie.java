@@ -69,7 +69,7 @@ public class PlayerDie implements Listener {
             //innos win
 
         }
-        Bukkit.getServer().broadcast(Component.empty().content(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain"));
+        Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         plr.setGameMode(GameMode.SPECTATOR);
         event.setCancelled(true);
     }
