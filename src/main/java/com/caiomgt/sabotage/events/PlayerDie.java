@@ -2,10 +2,8 @@ package com.caiomgt.sabotage.events;
 
 import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.teams;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,9 +29,8 @@ public class PlayerDie implements Listener {
         EntityDamageEvent.DamageCause cause = plr.getLastDamageCause().getCause();
         Team team = plr.getScoreboard().getPlayerTeam(plr);
         if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || cause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
-            LivingEntity killerEntity = plr.getKiller();
-            if (killerEntity instanceof Player) {
-                Player killer = (Player) killerEntity;
+            Player killer = plr.getKiller();
+            if (killer != null) {
                 Team killerTeam = killer.getScoreboard().getPlayerTeam(killer);
                 if (killerTeam == teams.sabs) {
                     if (team == teams.dets) {
@@ -68,8 +65,9 @@ public class PlayerDie implements Listener {
         } else if (sabs < 1) {
             //innos win
 
+        } else {
+            Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         }
-        Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         plr.setGameMode(GameMode.SPECTATOR);
         event.setCancelled(true);
     }

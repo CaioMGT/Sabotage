@@ -39,7 +39,9 @@ public class CommandHandler implements CommandExecutor {
             if (checkPerms(sender, false)) {
                 Player plr = (Player) sender;
                 if (!manager.gameStarted) {
-                    manager.Start(plr.getWorld());
+                    if (!manager.Start(plr.getWorld())) {
+                        plr.sendMessage(ChatColor.YELLOW + "Could not start game, too little players.");
+                    }
                 } else {
                     plr.sendMessage(ChatColor.YELLOW + "Could not start game, game already started.");
                 }
