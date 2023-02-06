@@ -35,6 +35,6 @@ public class PlayerJoin implements Listener {
             plr.getScoreboard().getPlayerTeam(plr).removePlayer(plr);
         }
         plr.getScoreboardTags().clear();
-        saveManager.save(event.getPlayer().getUniqueId());
+        saveManager.saveAndUnload(event.getPlayer().getUniqueId());
     }
 }
