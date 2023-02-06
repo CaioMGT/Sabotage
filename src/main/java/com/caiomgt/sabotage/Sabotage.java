@@ -21,15 +21,17 @@ public final class Sabotage extends JavaPlugin {
         teams.create();
         console.sendMessage("[SABOTAGE] Starting Sabotage");
         // Register Events
-        CommandHandler exec = new CommandHandler(this, GameManager);
+        manager.registerEvents(new PlayerJoin(this, SaveManager), this);
+        manager.registerEvents(new PlayerChat(this, teams, GameManager), this);
+        manager.registerEvents(new PlayerDie(this, teams, GameManager), this);
+        // Register Commands
+        CommandHandler exec = new CommandHandler(this, GameManager, SaveManager);
         getCommand("saboteur").setExecutor(exec);
         getCommand("innocent").setExecutor(exec);
         getCommand("detective").setExecutor(exec);
         getCommand("forcestart").setExecutor(exec);
-        manager.registerEvents(new PlayerJoin(this, SaveManager), this);
-        manager.registerEvents(new PlayerChat(this, teams, GameManager), this);
-        manager.registerEvents(new PlayerDie(this, teams, GameManager), this);
-
+        getCommand("getkarma").setExecutor(exec);
+        getCommand("setkarma").setExecutor(exec);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.caiomgt.sabotage;
 
 import com.google.gson.Gson;
 import org.bukkit.plugin.Plugin;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -44,8 +44,38 @@ public class SaveManager {
                 return data;
             }
         }
-        Data data = gson.fromJson(plugin.getDataFolder().getPath() + "\\sabData\\" + uuid, Data.class);
+        Data data;
+        File folder = plugin.getDataFolder();
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        File datafolder = new File(folder.getPath() + "\\sabData\\");
+        if (!datafolder.exists()) {
+            datafolder.mkdir();
+        }
+        File dataFile = new File(datafolder.getPath() + "\\" + uuid);
+        if (!dataFile.exists()) {
+            try {
+                dataFile.createNewFile();
+            } catch (IOException e) {
+                plugin.getServer().getConsoleSender().sendMessage("pain 3");
+                Data err = new Data();
+                err.success = false;
+                return err;
+            }
+        }
+        try {
+            data = gson.fromJson(new FileReader(dataFile), Data.class);
+        } catch (FileNotFoundException e) {
+            if (save(uuid, new Data(uuid, 1000))) {
+                return load(uuid);
+            }
+            Data err = new Data();
+            err.success = false;
+            return err;
+        }
         plrData.add(data);
+        data.success = true;
         return data;
     }
 }

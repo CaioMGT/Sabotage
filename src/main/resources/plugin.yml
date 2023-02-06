@@ -22,3 +22,11 @@ commands:
     description: Force starts the game
     usage: /<command>
     aliases: /fs
+  setkarma:
+    description: Sets that player's karma
+    usage: /<command> player
+    aliases: setkarma
+  getkarma:
+    description: Gets that player's karma
+    usage: /<command> player
+    aliases: getkarma

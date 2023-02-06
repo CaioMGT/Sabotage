@@ -9,9 +9,11 @@ import org.bukkit.plugin.Plugin;
 public class CommandHandler implements CommandExecutor {
     Plugin plugin;
     GameManager manager;
-    public CommandHandler(Plugin plugin, GameManager manager) {
+    SaveManager saveManager;
+    public CommandHandler(Plugin plugin, GameManager manager, SaveManager saveManager) {
         this.plugin = plugin;
         this.manager = manager;
+        this.saveManager = saveManager;
     }
     boolean checkTags(Player plr) {
         for (String tag : plr.getScoreboardTags()) {
@@ -45,6 +47,26 @@ public class CommandHandler implements CommandExecutor {
                 } else {
                     plr.sendMessage(ChatColor.YELLOW + "Could not start game, game already started.");
                 }
+            }
+        } else if (command.getName().equals("setkarma")){
+            if (checkPerms(sender, false)) {
+                Player plr = plugin.getServer().getPlayer(args[0]);
+                if (plr == null) {
+                    plr = (Player) sender;
+                }
+                try {
+                    saveManager.setKarma(plr.getUniqueId(), Integer.parseInt(args[1]));
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(ChatColor.YELLOW + "The karma you entered is not a number");
+                }
+            }
+        } else if (command.getName().equals("getkarma")){
+            if (checkPerms(sender, false)) {
+                Player plr = plugin.getServer().getPlayer(args[0]);
+                if (plr == null) {
+                    plr = (Player) sender;
+                }
+                sender.sendMessage(ChatColor.YELLOW + "That player has " + saveManager.getKarma(plr.getUniqueId()) + "Karma");
             }
         } else {
             if (checkPerms(sender, true)) {
