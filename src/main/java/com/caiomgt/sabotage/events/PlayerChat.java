@@ -11,7 +11,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Iterator;
+
 import java.util.Set;
 
 
@@ -32,7 +32,7 @@ public class PlayerChat implements Listener {
             if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
                 event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
             } else {
-                Set<OfflinePlayer> sabs = Teams.sabs.getPlayers(); //what else am i supposed to use if this is deprecated?
+                Set<OfflinePlayer> sabs = Teams.sabs.getPlayers(); //what else am I supposed to use if this is deprecated?
                 event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
                 event.getRecipients().removeAll(sabs);
                 for (OfflinePlayer sab : sabs) {
