@@ -1,16 +1,24 @@
 package com.caiomgt.sabotage.events;
 
+import com.caiomgt.sabotage.SaveManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
 public class PlayerJoin implements Listener {
+    Plugin plugin;
+    SaveManager saveManager;
+    public PlayerJoin(Plugin plugin, SaveManager sm) {
+        this.plugin = plugin;
+        saveManager = sm;
+    }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-
+        saveManager.load(event.getPlayer().getUniqueId());
     }
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
@@ -20,5 +28,6 @@ public class PlayerJoin implements Listener {
             plr.getScoreboard().getPlayerTeam(plr).removePlayer(plr);
         }
         plr.getScoreboardTags().clear();
+        saveManager.save(event.getPlayer().getUniqueId());
     }
 }

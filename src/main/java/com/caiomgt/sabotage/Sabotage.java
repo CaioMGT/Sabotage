@@ -14,6 +14,7 @@ public final class Sabotage extends JavaPlugin {
     PluginManager manager = server.getPluginManager();
     public teams teams = new teams();
     public GameManager GameManager = new GameManager(this, teams);
+    public SaveManager SaveManager = new SaveManager(this);
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -25,7 +26,7 @@ public final class Sabotage extends JavaPlugin {
         getCommand("innocent").setExecutor(exec);
         getCommand("detective").setExecutor(exec);
         getCommand("forcestart").setExecutor(exec);
-        manager.registerEvents(new PlayerJoin(), this);
+        manager.registerEvents(new PlayerJoin(this, SaveManager), this);
         manager.registerEvents(new PlayerChat(this, teams, GameManager), this);
         manager.registerEvents(new PlayerDie(this, teams, GameManager), this);
 
