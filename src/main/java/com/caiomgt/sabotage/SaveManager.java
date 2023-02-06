@@ -7,11 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-class Data {
-    public UUID uuid;
-    public int karma;
 
-}
 public class SaveManager {
     Plugin plugin;
     Gson gson = new Gson();

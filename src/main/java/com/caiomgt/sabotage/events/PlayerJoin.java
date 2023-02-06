@@ -1,5 +1,6 @@
 package com.caiomgt.sabotage.events;
 
+import com.caiomgt.sabotage.Data;
 import com.caiomgt.sabotage.SaveManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +19,7 @@ public class PlayerJoin implements Listener {
     }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        saveManager.load(event.getPlayer().getUniqueId());
+        Data data = saveManager.load(event.getPlayer().getUniqueId());
     }
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
