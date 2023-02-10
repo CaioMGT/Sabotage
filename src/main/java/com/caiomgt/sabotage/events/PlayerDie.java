@@ -4,6 +4,7 @@ import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.SaveManager;
 import com.caiomgt.sabotage.teams;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,33 +34,39 @@ public class PlayerDie implements Listener {
         Team team = plr.getScoreboard().getPlayerTeam(plr);
         if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || cause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
             Player killer = plr.getKiller();
-            Bukkit.getServer().getConsoleSender().sendMessage(killer.getName() + " killed someone");
             if (killer != null) {
+                Bukkit.getServer().getConsoleSender().sendMessage(killer.getName() + " killed someone");
                 Team killerTeam = killer.getScoreboard().getPlayerTeam(killer);
+                int karma;
                 if (killerTeam.equals(teams.sabs)) {
                     if (team.equals(teams.dets)) {
                         //is det, award more karma
-                        saves.addKarma(killer, 100);
+                        karma = 100;
+
                     } else if (team.equals(teams.innos)) {
                         //is inno, award karma
-                        saves.addKarma(killer, 20);
+                        karma = 20;
                     } else {
                         //is sab, remove karma
-                        saves.addKarma(killer, -100);
+                        karma = -100;
                     }
                 } else {
                     //is not sab
                     if (team.equals(teams.sabs)) {
                         //award karma
-                        saves.addKarma(killer, 40);
+                        karma = 40;
                     } else if (team.equals(teams.dets)) {
                         //is det, kill killer
                         killer.setHealth(0);
+                        karma = -100;
                     } else {
                         //is inno, remove karma
-                        saves.addKarma(killer, -20);
+                        karma = -20;
                     }
+
                 }
+                saves.addKarma(killer, karma);
+                killer.sendMessage(ChatColor.YELLOW + "You killed ");
                 plugin.getServer().getConsoleSender().sendMessage(plr.getName() + " was killed by " + killer.getName());
             }
         }
