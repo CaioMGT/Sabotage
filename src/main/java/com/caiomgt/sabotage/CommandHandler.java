@@ -50,12 +50,21 @@ public class CommandHandler implements CommandExecutor {
             }
         } else if (command.getName().equals("setkarma")){
             if (checkPerms(sender, false)) {
-                Player plr = plugin.getServer().getPlayer(args[0]);
-                if (plr == null) {
+                Player plr;
+                if (args.length > 1) {
+                    plr = plugin.getServer().getPlayer(args[0]);
+                } else {
                     plr = (Player) sender;
                 }
                 try {
-                    saveManager.setKarma(plr.getUniqueId(), Integer.parseInt(args[1]));
+                    if (args.length > 1) {
+                        saveManager.setKarma(plr.getUniqueId(), Integer.parseInt(args[1]));
+                    } else if (args.length == 0) {
+                        return false;
+                    } else {
+                        saveManager.setKarma(plr.getUniqueId(), Integer.parseInt(args[0]));
+                    }
+                    sender.sendMessage(ChatColor.YELLOW + "That player now has " + ChatColor.GREEN + saveManager.getKarma(plr.getUniqueId()) + ChatColor.YELLOW + " Karma");
                 } catch (NumberFormatException e) {
                     sender.sendMessage(ChatColor.YELLOW + "The karma you entered is not a number");
                 }
@@ -66,7 +75,7 @@ public class CommandHandler implements CommandExecutor {
                 if (plr == null) {
                     plr = (Player) sender;
                 }
-                sender.sendMessage(ChatColor.YELLOW + "That player has " + saveManager.getKarma(plr.getUniqueId()) + "Karma");
+                sender.sendMessage(ChatColor.YELLOW + "That player has " + ChatColor.GREEN + saveManager.getKarma(plr.getUniqueId()) + ChatColor.YELLOW + " Karma");
             }
         } else {
             if (checkPerms(sender, true)) {
