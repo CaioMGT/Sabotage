@@ -1,6 +1,7 @@
 package com.caiomgt.sabotage.events;
 
 import com.caiomgt.sabotage.GameManager;
+import com.caiomgt.sabotage.SaveManager;
 import com.caiomgt.sabotage.teams;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -16,10 +17,12 @@ public class PlayerDie implements Listener {
     Plugin plugin;
     teams teams;
     GameManager manager;
-    public PlayerDie(Plugin plugin, teams teams, GameManager manager) {
+    SaveManager saves;
+    public PlayerDie(Plugin plugin, teams teams, GameManager manager, SaveManager saves) {
         this.plugin = plugin;
         this.teams = teams;
         this.manager = manager;
+        this.saves = saves;
     }
     @EventHandler
     public void onDie(PlayerDeathEvent event) {
@@ -30,24 +33,31 @@ public class PlayerDie implements Listener {
         Team team = plr.getScoreboard().getPlayerTeam(plr);
         if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK || cause == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
             Player killer = plr.getKiller();
+            Bukkit.getServer().getConsoleSender().sendMessage(killer.getName() + " killed someone");
             if (killer != null) {
                 Team killerTeam = killer.getScoreboard().getPlayerTeam(killer);
-                if (killerTeam == teams.sabs) {
-                    if (team == teams.dets) {
+                if (killerTeam.equals(teams.sabs)) {
+                    if (team.equals(teams.dets)) {
                         //is det, award more karma
-                    } else if (team == teams.innos) {
+                        saves.addKarma(killer, 100);
+                    } else if (team.equals(teams.innos)) {
                         //is inno, award karma
+                        saves.addKarma(killer, 20);
                     } else {
                         //is sab, remove karma
+                        saves.addKarma(killer, -100);
                     }
                 } else {
                     //is not sab
-                    if (team == teams.sabs) {
+                    if (team.equals(teams.sabs)) {
                         //award karma
-                    } else if (team == teams.dets) {
+                        saves.addKarma(killer, 40);
+                    } else if (team.equals(teams.dets)) {
                         //is det, kill killer
+                        killer.setHealth(0);
                     } else {
                         //is inno, remove karma
+                        saves.addKarma(killer, -20);
                     }
                 }
                 plugin.getServer().getConsoleSender().sendMessage(plr.getName() + " was killed by " + killer.getName());
@@ -61,10 +71,10 @@ public class PlayerDie implements Listener {
         int sabs = this.teams.dets.getEntries().size();
         if (innos < 1 && dets < 1) {
             //sabs win
-
+            Bukkit.getServer().getConsoleSender().sendMessage("sabs win");
         } else if (sabs < 1) {
             //innos win
-
+            Bukkit.getServer().getConsoleSender().sendMessage("innos win");
         } else {
             Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         }

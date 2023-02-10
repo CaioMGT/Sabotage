@@ -1,6 +1,7 @@
 package com.caiomgt.sabotage;
 
 import com.google.gson.Gson;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
@@ -30,7 +31,8 @@ public class SaveManager {
             throw new UncheckedIOException(e);
         }
     }
-    public void saveAndUnload(UUID uuid) {
+    public void saveAndUnload(Player plr) {
+        UUID uuid = plr.getUniqueId();
         Data data = plrData.remove(uuid);
         if (data == null) return; // Shouldn't happen
         try {
@@ -50,16 +52,20 @@ public class SaveManager {
             throw new UncheckedIOException(e);
         }
     }
-    public void setKarma(UUID uuid, int karma) {
+    public void setKarma(Player plr, int karma) {
+        UUID uuid = plr.getUniqueId();
         plrData.get(uuid).karma = karma;
+        plr.setLevel(karma);
     }
-    public int getKarma(UUID uuid) {
+    public int getKarma(Player plr) {
+        UUID uuid = plr.getUniqueId();
         return plrData.get(uuid).karma;
     }
-    public void addKarma(UUID uuid, int karma) {
-        setKarma(uuid, getKarma(uuid) + karma);
+    public void addKarma(Player plr, int karma) {
+        setKarma(plr, getKarma(plr) + karma);
     }
-    public Data load(UUID uuid) {
+    public Data load(Player plr) {
+        UUID uuid = plr.getUniqueId();
         return plrData.computeIfAbsent(uuid, u -> {
             Path f = dataFolder.resolve(uuid.toString());
             Data d = null;

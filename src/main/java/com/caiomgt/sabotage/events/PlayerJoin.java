@@ -20,7 +20,7 @@ public class PlayerJoin implements Listener {
     }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        Data data = saveManager.load(event.getPlayer().getUniqueId());
+        Data data = saveManager.load(event.getPlayer());
         if (!data.success) {
             event.getPlayer().kickPlayer("Could not get data, sorry.");
         } else {
@@ -35,6 +35,6 @@ public class PlayerJoin implements Listener {
             plr.getScoreboard().getPlayerTeam(plr).removePlayer(plr);
         }
         plr.getScoreboardTags().clear();
-        saveManager.saveAndUnload(event.getPlayer().getUniqueId());
+        saveManager.saveAndUnload(plr);
     }
 }
