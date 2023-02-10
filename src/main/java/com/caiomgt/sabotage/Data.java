@@ -11,5 +11,5 @@ public class Data {
     }
     public UUID uuid;
     public int karma;
-    public transient boolean success;
+    public transient boolean success = true;
 }
