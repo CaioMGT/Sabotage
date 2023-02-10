@@ -71,7 +71,12 @@ public class CommandHandler implements CommandExecutor {
             }
         } else if (command.getName().equals("getkarma")){
             if (checkPerms(sender, false)) {
-                Player plr = plugin.getServer().getPlayer(args[0]);
+                Player plr;
+                if (args.length == 0) {
+                    plr = (Player) sender;
+                } else {
+                    plr = plugin.getServer().getPlayer(args[0]);
+                }
                 if (plr == null) {
                     plr = (Player) sender;
                 }
