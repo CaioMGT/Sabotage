@@ -13,8 +13,9 @@ public final class Sabotage extends JavaPlugin {
     ConsoleCommandSender console = server.getConsoleSender();
     PluginManager manager = server.getPluginManager();
     public teams teams = new teams();
-    public GameManager GameManager = new GameManager(this, teams);
     public SaveManager SaveManager = new SaveManager(this);
+    public GameManager GameManager = new GameManager(this, teams, SaveManager);
+
     @Override
     public void onEnable() {
         // Plugin startup logic

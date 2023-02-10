@@ -12,13 +12,15 @@ public class GameManager {
     public boolean gameStarted = false;
     public JavaPlugin plugin;
     public teams teams;
+    public SaveManager saves;
     //Player lists
     public List<Player> sabs = new ArrayList<>();
     public List<Player> innos = new ArrayList<>();
     public List<Player> dets = new ArrayList<>();
-    public GameManager(JavaPlugin plugin, teams teams) {
+    public GameManager(JavaPlugin plugin, teams teams, SaveManager saves) {
         this.plugin = plugin;
         this.teams = teams;
+        this.saves = saves;
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
@@ -69,5 +71,8 @@ public class GameManager {
     }
     public void cleanup() {
         teams.cleanup();
+        for (Player plr : plugin.getServer().getOnlinePlayers()) {
+            saves.saveAndUnload(plr);
+        }
     }
 }
