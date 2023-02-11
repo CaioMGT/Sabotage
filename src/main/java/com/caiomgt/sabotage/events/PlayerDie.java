@@ -67,7 +67,13 @@ public class PlayerDie implements Listener {
 
                 }
                 saves.addKarma(killer, karma);
-                killer.sendMessage(ChatColor.YELLOW + "You killed " + ((team.equals(teams.innos)) ? ChatColor.GREEN : (team.equals(teams.dets)) ? ChatColor.BLUE : ChatColor.RED) + plr.getName() + ChatColor.YELLOW + " (" + ((karma <= 0) ? ChatColor.RED : ChatColor.GREEN) + karma + ChatColor.YELLOW + " Karma)");
+                killer.sendMessage(ChatColor.YELLOW + "You killed " + (
+                        (team.equals(teams.innos))
+                                ? ChatColor.GREEN
+                                : (team.equals(teams.dets))
+                                    ? ChatColor.BLUE
+                                    : ChatColor.RED)
+                        + plr.getName() + ChatColor.YELLOW + " (" + ((karma <= 0) ? ChatColor.RED : ChatColor.GREEN) + karma + ChatColor.YELLOW + " Karma)");
                 plugin.getServer().getConsoleSender().sendMessage(plr.getName() + " was killed by " + killer.getName());
             }
         }
