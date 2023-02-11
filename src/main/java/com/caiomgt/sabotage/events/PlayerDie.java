@@ -57,7 +57,8 @@ public class PlayerDie implements Listener {
                         karma = 40;
                     } else if (team.equals(teams.dets)) {
                         //is det, kill killer
-                        killer.setHealth(0);
+                        killer.setGameMode(GameMode.SPECTATOR);
+                        killer.getScoreboard().getPlayerTeam(killer).removePlayer(killer);
                         karma = -100;
                     } else {
                         //is inno, remove karma
@@ -66,7 +67,7 @@ public class PlayerDie implements Listener {
 
                 }
                 saves.addKarma(killer, karma);
-                killer.sendMessage(ChatColor.YELLOW + "You killed ");
+                killer.sendMessage(ChatColor.YELLOW + "You killed " + ((team.equals(teams.innos)) ? ChatColor.GREEN : (team.equals(teams.dets)) ? ChatColor.BLUE : ChatColor.RED) + plr.getName() + ChatColor.YELLOW + " (" + ((karma <= 0) ? ChatColor.RED : ChatColor.GREEN) + karma + ChatColor.YELLOW + " Karma)");
                 plugin.getServer().getConsoleSender().sendMessage(plr.getName() + " was killed by " + killer.getName());
             }
         }
@@ -76,12 +77,9 @@ public class PlayerDie implements Listener {
         int innos = this.teams.innos.getEntries().size();
         int dets = this.teams.dets.getEntries().size();
         int sabs = this.teams.dets.getEntries().size();
-        if (innos < 1 && dets < 1) {
-            //sabs win
-            Bukkit.getServer().getConsoleSender().sendMessage("sabs win");
-        } else if (sabs < 1) {
-            //innos win
-            Bukkit.getServer().getConsoleSender().sendMessage("innos win");
+        if (innos < 1 && dets < 1 || sabs < 1) {
+            //game end
+            manager.End(event.getPlayer().getWorld());
         } else {
             Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         }

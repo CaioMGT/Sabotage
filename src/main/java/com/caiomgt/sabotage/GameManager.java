@@ -1,11 +1,14 @@
 package com.caiomgt.sabotage;
 
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
@@ -51,7 +54,32 @@ public class GameManager {
         }
         return false;
     }
-
+    public void End(World world) {
+        plugin.getServer().broadcastMessage("The game has ended! The following players were the saboteurs: " + ChatColor.RED + sabs.toString());
+        if (sabs.size() < 1) {
+            //award karma to surviving innocents
+            for (OfflinePlayer plr : teams.innos.getPlayers()) {
+                saves.addKarma((Player) plr, 20);
+            }
+            for (OfflinePlayer plr : teams.dets.getPlayers()) {
+                saves.addKarma((Player) plr, 50);
+            }
+        } else {
+            //award karma to surviving saboteurs
+            for (OfflinePlayer plr : teams.sabs.getPlayers()) {
+                saves.addKarma((Player) plr, 20);
+            }
+        }
+        for (OfflinePlayer plr : teams.innos.getPlayers()) {
+            teams.innos.removePlayer(plr);
+        }
+        for (OfflinePlayer plr : teams.dets.getPlayers()) {
+            teams.dets.removePlayer(plr);
+        }
+        for (OfflinePlayer plr : teams.sabs.getPlayers()) {
+            teams.sabs.removePlayer(plr);
+        }
+    }
     public boolean AddSab(Player plr) {
         teams.sabs.addPlayer(plr);
         sabs.add(plr);
