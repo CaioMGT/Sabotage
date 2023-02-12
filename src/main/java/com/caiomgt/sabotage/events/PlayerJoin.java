@@ -2,6 +2,8 @@ package com.caiomgt.sabotage.events;
 
 
 import com.caiomgt.sabotage.Data;
+import com.caiomgt.sabotage.EndType;
+import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.SaveManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,9 +16,11 @@ import org.bukkit.scoreboard.Team;
 public class PlayerJoin implements Listener {
     Plugin plugin;
     SaveManager saveManager;
-    public PlayerJoin(Plugin plugin, SaveManager sm) {
+    GameManager gameManager;
+    public PlayerJoin(Plugin plugin, GameManager gm, SaveManager sm) {
         this.plugin = plugin;
-        saveManager = sm;
+        this.saveManager = sm;
+        this.gameManager = gm;
     }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -33,6 +37,10 @@ public class PlayerJoin implements Listener {
         Team plrTeam = plr.getScoreboard().getPlayerTeam(plr);
         if (!(plrTeam == null)) {
             plr.getScoreboard().getPlayerTeam(plr).removePlayer(plr);
+            // Check if the game will end after player leaves
+            if (gameManager.checkEnd() != EndType.NONE) {
+                gameManager.End(plr.getWorld());
+            }
         }
         plr.getScoreboardTags().clear();
         saveManager.saveAndUnload(plr);
