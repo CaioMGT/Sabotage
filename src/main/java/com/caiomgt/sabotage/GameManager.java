@@ -2,13 +2,13 @@ package com.caiomgt.sabotage;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class GameManager {
@@ -20,15 +20,17 @@ public class GameManager {
     public List<Player> sabs = new ArrayList<>();
     public List<Player> innos = new ArrayList<>();
     public List<Player> dets = new ArrayList<>();
+    Server server;
     public GameManager(JavaPlugin plugin, teams teams, SaveManager saves) {
         this.plugin = plugin;
         this.teams = teams;
         this.saves = saves;
+        this.server = plugin.getServer();
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
             List<Player> plrs = world.getPlayers();
-            //remove force-picked players from generating roles
+            // Remove force-picked players from generating roles
             plrs.removeAll(sabs);
             plrs.removeAll(innos);
             plrs.removeAll(dets);
@@ -54,30 +56,52 @@ public class GameManager {
         }
         return false;
     }
-    public void End(World world) {
-        plugin.getServer().broadcastMessage("The game has ended! The following players were the saboteurs: " + ChatColor.RED + sabs.toString());
+    public EndType checkEnd() {
         if (sabs.size() < 1) {
-            //award karma to surviving innocents
+            return EndType.INNOCENTS;
+        } else if (innos.size() < 1 && dets.size() < 1) {
+            return EndType.SABOTEURS;
+        }
+        return EndType.NONE;
+    }
+    String getPlayerNamesInList(List<Player> list){
+        String result = "";
+        for (Player plr : list){
+            result = result + plr.getName() + " ";
+        }
+        return result;
+    }
+    public void End(World world) {
+        EndType endType = checkEnd();
+        if (!(endType == EndType.NONE) && gameStarted) {
+            server.broadcastMessage("The game has ended! The following players were the saboteurs: " + ChatColor.RED + getPlayerNamesInList(sabs));
+            if (endType == EndType.INNOCENTS) {
+                // Award karma to surviving innocents
+                server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.GREEN + "Innocents" + ChatColor.RESET + "and 50 Karma to surviving " + ChatColor.BLUE + "Detectives");
+                for (OfflinePlayer plr : teams.innos.getPlayers()) {
+                    saves.addKarma((Player) plr, 20);
+                }
+                for (OfflinePlayer plr : teams.dets.getPlayers()) {
+                    saves.addKarma((Player) plr, 50);
+                }
+            } else {
+                // Award karma to surviving saboteurs
+                server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.RED + "Saboteurs");
+                for (OfflinePlayer plr : teams.sabs.getPlayers()) {
+                    saves.addKarma((Player) plr, 20);
+                }
+            }
+            // Remove all players from teams.
             for (OfflinePlayer plr : teams.innos.getPlayers()) {
-                saves.addKarma((Player) plr, 20);
+                teams.innos.removePlayer(plr);
             }
             for (OfflinePlayer plr : teams.dets.getPlayers()) {
-                saves.addKarma((Player) plr, 50);
+                teams.dets.removePlayer(plr);
             }
-        } else {
-            //award karma to surviving saboteurs
             for (OfflinePlayer plr : teams.sabs.getPlayers()) {
-                saves.addKarma((Player) plr, 20);
+                teams.sabs.removePlayer(plr);
             }
-        }
-        for (OfflinePlayer plr : teams.innos.getPlayers()) {
-            teams.innos.removePlayer(plr);
-        }
-        for (OfflinePlayer plr : teams.dets.getPlayers()) {
-            teams.dets.removePlayer(plr);
-        }
-        for (OfflinePlayer plr : teams.sabs.getPlayers()) {
-            teams.sabs.removePlayer(plr);
+            gameStarted = false;
         }
     }
     public boolean AddSab(Player plr) {
@@ -99,7 +123,7 @@ public class GameManager {
     }
     public void cleanup() {
         teams.cleanup();
-        for (Player plr : plugin.getServer().getOnlinePlayers()) {
+        for (Player plr : server.getOnlinePlayers()) {
             saves.saveAndUnload(plr);
         }
     }

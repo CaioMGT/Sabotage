@@ -1,5 +1,6 @@
 package com.caiomgt.sabotage.events;
 
+import com.caiomgt.sabotage.EndType;
 import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.SaveManager;
 import com.caiomgt.sabotage.teams;
@@ -83,7 +84,7 @@ public class PlayerDie implements Listener {
         int innos = this.teams.innos.getEntries().size();
         int dets = this.teams.dets.getEntries().size();
         int sabs = this.teams.dets.getEntries().size();
-        if (innos < 1 && dets < 1 || sabs < 1) {
+        if (!(manager.checkEnd() == EndType.NONE)) {
             //game end
             manager.End(event.getPlayer().getWorld());
         } else {
