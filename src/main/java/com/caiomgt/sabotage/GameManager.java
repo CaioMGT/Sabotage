@@ -1,7 +1,6 @@
 package com.caiomgt.sabotage;
 
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -29,6 +28,28 @@ public class GameManager {
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
+            server.broadcastMessage("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.");
+            try {
+                for (int i = 1; i < 30; i++) {
+                    wait(1000);
+
+                }
+            } catch(InterruptedException e) {
+                server.getConsoleSender().sendMessage("Could not wait until grace period is over, cancelling game");
+                for (String plr : teams.innos.getEntries()) {
+                    teams.innos.removePlayer(server.getPlayer(plr));
+                }
+                for (String plr : teams.dets.getEntries()) {
+                    teams.dets.removePlayer(server.getPlayer(plr));
+                }
+                for (String plr : teams.sabs.getEntries()) {
+                    teams.sabs.removePlayer(server.getPlayer(plr));
+                }
+                sabs.clear();
+                dets.clear();
+                innos.clear();
+                gameStarted = false;
+            }
             List<Player> plrs = world.getPlayers();
             // Remove force-picked players from generating roles
             plrs.removeAll(sabs);
@@ -78,28 +99,28 @@ public class GameManager {
             if (endType == EndType.INNOCENTS) {
                 // Award karma to surviving innocents
                 server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.GREEN + "Innocents" + ChatColor.RESET + "and 50 Karma to surviving " + ChatColor.BLUE + "Detectives");
-                for (OfflinePlayer plr : teams.innos.getPlayers()) {
-                    saves.addKarma((Player) plr, 20);
+                for (String plr : teams.innos.getEntries()) {
+                    saves.addKarma(server.getPlayer(plr), 20);
                 }
-                for (OfflinePlayer plr : teams.dets.getPlayers()) {
-                    saves.addKarma((Player) plr, 50);
+                for (String plr : teams.dets.getEntries()) {
+                    saves.addKarma(server.getPlayer(plr), 50);
                 }
             } else {
                 // Award karma to surviving saboteurs
                 server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.RED + "Saboteurs");
-                for (OfflinePlayer plr : teams.sabs.getPlayers()) {
-                    saves.addKarma((Player) plr, 20);
+                for (String plr : teams.sabs.getEntries()) {
+                    saves.addKarma(server.getPlayer(plr), 20);
                 }
             }
             // Remove all players from teams.
-            for (OfflinePlayer plr : teams.innos.getPlayers()) {
-                teams.innos.removePlayer(plr);
+            for (String plr : teams.innos.getEntries()) {
+                teams.innos.removePlayer(server.getPlayer(plr));
             }
-            for (OfflinePlayer plr : teams.dets.getPlayers()) {
-                teams.dets.removePlayer(plr);
+            for (String plr : teams.dets.getEntries()) {
+                teams.dets.removePlayer(server.getPlayer(plr));
             }
-            for (OfflinePlayer plr : teams.sabs.getPlayers()) {
-                teams.sabs.removePlayer(plr);
+            for (String plr : teams.sabs.getEntries()) {
+                teams.sabs.removePlayer(server.getPlayer(plr));
             }
             sabs.clear();
             dets.clear();
