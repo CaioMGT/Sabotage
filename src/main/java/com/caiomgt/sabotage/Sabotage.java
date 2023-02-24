@@ -22,7 +22,7 @@ public final class Sabotage extends JavaPlugin {
         teams.create();
         console.sendMessage("[SABOTAGE] Starting Sabotage");
         // Register Events
-        manager.registerEvents(new PlayerJoin(this, SaveManager), this);
+        manager.registerEvents(new PlayerJoin(this, GameManager, SaveManager), this);
         manager.registerEvents(new PlayerChat(this, teams, GameManager), this);
         manager.registerEvents(new PlayerDie(this, teams, GameManager, SaveManager), this);
         // Register Commands

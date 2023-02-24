@@ -81,11 +81,8 @@ public class PlayerDie implements Listener {
         if (!(team == null)) {
             team.removePlayer(plr);
         }
-        int innos = this.teams.innos.getEntries().size();
-        int dets = this.teams.dets.getEntries().size();
-        int sabs = this.teams.dets.getEntries().size();
         if (!(manager.checkEnd() == EndType.NONE)) {
-            //game end
+            // game end
             manager.End(event.getPlayer().getWorld());
         } else {
             Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");

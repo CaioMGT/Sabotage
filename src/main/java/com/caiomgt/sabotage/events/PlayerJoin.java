@@ -28,7 +28,7 @@ public class PlayerJoin implements Listener {
         if (!data.success) {
             event.getPlayer().kickPlayer("Could not get data, sorry.");
         } else {
-            event.getPlayer().setLevel((data.karma >= 0) ? data.karma : 0);
+            event.getPlayer().setLevel(Math.max(data.karma, 0));
         }
     }
     @EventHandler

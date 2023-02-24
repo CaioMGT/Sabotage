@@ -36,7 +36,7 @@ public class GameManager {
             plrs.removeAll(dets);
             Collections.shuffle(plrs);
             int sabCount = plrs.size() / 3;
-            if (sabCount < 1) {
+            if (sabCount < 1 && sabs.size() < 1) {
                 sabCount = 1;
             }
             int detCount = plrs.size() / 8;
@@ -57,9 +57,9 @@ public class GameManager {
         return false;
     }
     public EndType checkEnd() {
-        if (sabs.size() < 1) {
+        if (teams.sabs.getSize() < 1) {
             return EndType.INNOCENTS;
-        } else if (innos.size() < 1 && dets.size() < 1) {
+        } else if (teams.innos.getSize() < 1 && teams.dets.getSize() < 1) {
             return EndType.SABOTEURS;
         }
         return EndType.NONE;
@@ -101,6 +101,9 @@ public class GameManager {
             for (OfflinePlayer plr : teams.sabs.getPlayers()) {
                 teams.sabs.removePlayer(plr);
             }
+            sabs.clear();
+            dets.clear();
+            innos.clear();
             gameStarted = false;
         }
     }
