@@ -16,6 +16,7 @@ import java.util.List;
 
 public class GameManager {
     public boolean gameStarted = false;
+    public boolean gracePeriod = false;
     public JavaPlugin plugin;
     public teams teams;
     public SaveManager saves;
@@ -32,6 +33,7 @@ public class GameManager {
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
+            gracePeriod = true;
             gameStarted = true;
             server.broadcastMessage("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.");
             Objective sidebar = teams.sidebar;
@@ -48,6 +50,7 @@ public class GameManager {
             }
             // Only pick roles after the grace period
             scheduler.runTaskLater(plugin, () -> {
+                gracePeriod = false;
                 sidebar.getScore("Time left: 1").resetScore();
                 List<Player> plrs = world.getPlayers();
                 // Remove force-picked players from generating roles

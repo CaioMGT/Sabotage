@@ -1,6 +1,7 @@
 package com.caiomgt.sabotage;
 
 import com.caiomgt.sabotage.events.PlayerChat;
+import com.caiomgt.sabotage.events.PlayerDamage;
 import com.caiomgt.sabotage.events.PlayerDie;
 import com.caiomgt.sabotage.events.PlayerJoin;
 import org.bukkit.Server;
@@ -24,6 +25,7 @@ public final class Sabotage extends JavaPlugin {
         manager.registerEvents(new PlayerJoin(this, GameManager, SaveManager), this);
         manager.registerEvents(new PlayerChat(this, teams, GameManager), this);
         manager.registerEvents(new PlayerDie(this, teams, GameManager, SaveManager), this);
+        manager.registerEvents(new PlayerDamage(this, GameManager), this);
         // Register Commands
         CommandHandler exec = new CommandHandler(this, GameManager, SaveManager);
         getCommand("saboteur").setExecutor(exec);
