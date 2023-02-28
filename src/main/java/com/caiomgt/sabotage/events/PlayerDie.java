@@ -28,8 +28,6 @@ public class PlayerDie implements Listener {
     }
     @EventHandler
     public void onDie(PlayerDeathEvent event) {
-        //TODO: USE KARMA SYSTEM
-        //TODO: WIN / LOSE CONDITION
         Player plr = event.getPlayer();
         EntityDamageEvent.DamageCause cause = plr.getLastDamageCause().getCause();
         Team team = plr.getScoreboard().getPlayerTeam(plr);
@@ -87,7 +85,9 @@ public class PlayerDie implements Listener {
         } else {
             Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
         }
-        plr.setGameMode(GameMode.SPECTATOR);
-        event.setCancelled(true);
+        if (manager.gameStarted) {
+            plr.setGameMode(GameMode.SPECTATOR);
+            event.setCancelled(true);
+        }
     }
 }
