@@ -1,10 +1,14 @@
 package com.caiomgt.sabotage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,51 +32,46 @@ public class GameManager {
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
-            server.broadcastMessage("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.");
-            try {
-                for (int i = 1; i < 30; i++) {
-                    wait(1000);
-
-                }
-            } catch(InterruptedException e) {
-                server.getConsoleSender().sendMessage("Could not wait until grace period is over, cancelling game");
-                for (String plr : teams.innos.getEntries()) {
-                    teams.innos.removePlayer(server.getPlayer(plr));
-                }
-                for (String plr : teams.dets.getEntries()) {
-                    teams.dets.removePlayer(server.getPlayer(plr));
-                }
-                for (String plr : teams.sabs.getEntries()) {
-                    teams.sabs.removePlayer(server.getPlayer(plr));
-                }
-                sabs.clear();
-                dets.clear();
-                innos.clear();
-                gameStarted = false;
-            }
-            List<Player> plrs = world.getPlayers();
-            // Remove force-picked players from generating roles
-            plrs.removeAll(sabs);
-            plrs.removeAll(innos);
-            plrs.removeAll(dets);
-            Collections.shuffle(plrs);
-            int sabCount = plrs.size() / 3;
-            if (sabCount < 1 && sabs.size() < 1) {
-                sabCount = 1;
-            }
-            int detCount = plrs.size() / 8;
-            for (Player plr : plrs) {
-                if (detCount >= 1) {
-                    detCount--;
-                    AddDet(plr);
-                } else if (sabCount >= 1) {
-                    sabCount--;
-                    AddSab(plr);
-                } else {
-                    AddInno(plr);
-                }
-            }
             gameStarted = true;
+            server.broadcastMessage("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.");
+            Objective sidebar = teams.sidebar;
+            sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
+            BukkitScheduler scheduler = Bukkit.getScheduler();
+            sidebar.getScore("Time left: 30").setScore(1);
+            // Timer
+            for (int i = 1; i <= 30; i++) {
+                final int j = i;
+                scheduler.runTaskLater(plugin, () -> {
+                    sidebar.getScore("Time left: " + j).setScore(1);
+                    sidebar.getScore("Time left: " + (j + 1)).resetScore();
+                }, 20 * (30 - i));
+            }
+            // Only pick roles after the grace period
+            scheduler.runTaskLater(plugin, () -> {
+                sidebar.getScore("Time left: 1").resetScore();
+                List<Player> plrs = world.getPlayers();
+                // Remove force-picked players from generating roles
+                plrs.removeAll(sabs);
+                plrs.removeAll(innos);
+                plrs.removeAll(dets);
+                Collections.shuffle(plrs);
+                int sabCount = plrs.size() / 3;
+                if (sabCount < 1 && sabs.size() < 1) {
+                    sabCount = 1;
+                }
+                int detCount = plrs.size() / 8;
+                for (Player plr : plrs) {
+                    if (detCount >= 1) {
+                        detCount--;
+                        AddDet(plr);
+                    } else if (sabCount >= 1) {
+                        sabCount--;
+                        AddSab(plr);
+                    } else {
+                        AddInno(plr);
+                    }
+                }
+            }, 20 * 30);
             return true;
         }
         return false;
