@@ -14,16 +14,13 @@ public class teams {
     public void create(){
         Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
         sidebar = board.registerNewObjective("side", "dummy");
-        if (!(board.getTeam("Saboteurs") == null)) {
-            sabs = board.getTeam("Saboteurs");
-            dets = board.getTeam("Detectives");
-            innos = board.getTeam("Innocents");
-        } else {
-            sabs = board.registerNewTeam("Saboteurs");
-            dets = board.registerNewTeam("Detectives");
-            innos = board.registerNewTeam("Innocents");
-            dets.setColor(ChatColor.BLUE);
-        }
+        sabs = board.getTeam("Saboteurs");
+        dets = board.getTeam("Detectives");
+        innos = board.getTeam("Innocents");
+        sabs = board.registerNewTeam("Saboteurs");
+        dets = board.registerNewTeam("Detectives");
+        innos = board.registerNewTeam("Innocents");
+        dets.setColor(ChatColor.BLUE);
     }
     public void cleanup(){
         sabs.unregister();
