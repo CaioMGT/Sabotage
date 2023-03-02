@@ -32,7 +32,6 @@ public class PlayerChat implements Listener {
     }
     @EventHandler
     public void onChat(AsyncChatEvent event) {
-        // I'll leave this for a different pr, requires some restructuring to transition to components
         Player plr = event.getPlayer();
         Team plrTeam = plr.getScoreboard().getEntityTeam(plr);
         event.renderer(new ChatRenderer() {
@@ -67,25 +66,5 @@ public class PlayerChat implements Listener {
                         .build();
             }
         });
-        if (manager.gameStarted && !manager.gracePeriod){
-            /*if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
-                event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
-            } else {
-                Set<Player> sabs = manager.getPlayersInTeam(Teams.sabs);
-                event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
-                event.getRecipients().removeAll(sabs);
-                for (Player sab : sabs) {
-                    ChatColor color;
-                    if (plrTeam.equals(Teams.innos)){
-                        color = ChatColor.GREEN;
-                    } else if(plrTeam.equals(Teams.sabs)) {
-                        color = ChatColor.RED;
-                    } else {
-                        color = ChatColor.YELLOW;
-                    }
-                    sab.getPlayer().sendMessage(color + "<" + plr.getName() + "> " + ChatColor.RESET + event.getMessage());
-                }
-            }*/
-        }
     }
 }
