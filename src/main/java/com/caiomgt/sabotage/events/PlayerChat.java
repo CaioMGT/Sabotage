@@ -33,10 +33,10 @@ public class PlayerChat implements Listener {
             if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
                 event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
             } else {
-                Set<OfflinePlayer> sabs = Teams.sabs.getPlayers(); //what else am I supposed to use if this is deprecated?
+                Set<Player> sabs = manager.getPlayersInTeam(Teams.sabs);
                 event.setFormat(ChatColor.YELLOW + "<%s> " + ChatColor.RESET + "%s");
                 event.getRecipients().removeAll(sabs);
-                for (OfflinePlayer sab : sabs) {
+                for (Player sab : sabs) {
                     ChatColor color;
                     if (plrTeam.equals(Teams.innos)){
                         color = ChatColor.GREEN;

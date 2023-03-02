@@ -10,10 +10,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GameManager {
     public boolean gameStarted = false;
@@ -95,6 +94,13 @@ public class GameManager {
         }
         return result;
     }
+    public Set<Player> getPlayersInTeam(Team team) {
+        Set<Player> plrs = new HashSet<>();
+        for (String plr : team.getEntries()) {
+            plrs.add(server.getPlayer(plr));
+        }
+        return plrs;
+    }
     public void End(World world) {
         EndType endType = checkEnd();
         if (!(endType == EndType.NONE) && gameStarted) {
@@ -108,28 +114,28 @@ public class GameManager {
                                 .append(Component.text("and 50 Karma to surviving ")
                                         .append(Component.text("Detectives", NamedTextColor.BLUE))))
                         .build());
-                for (String plr : teams.innos.getEntries()) {
-                    saves.addKarma(server.getPlayer(plr), 20);
+                for (Player plr : getPlayersInTeam(teams.innos)) {
+                    saves.addKarma(plr, 20);
                 }
-                for (String plr : teams.dets.getEntries()) {
-                    saves.addKarma(server.getPlayer(plr), 50);
+                for (Player plr : getPlayersInTeam(teams.dets)) {
+                    saves.addKarma(plr, 50);
                 }
             } else {
                 // Award karma to surviving saboteurs
                 server.broadcast(Component.text().content("Awarding 20 Karma to surviving ").append(Component.text("Saboteurs", NamedTextColor.RED)).build());
-                for (String plr : teams.sabs.getEntries()) {
-                    saves.addKarma(server.getPlayer(plr), 20);
+                for (Player plr : getPlayersInTeam(teams.sabs)) {
+                    saves.addKarma(plr, 20);
                 }
             }
             // Remove all players from teams.
-            for (String plr : teams.innos.getEntries()) {
-                teams.innos.removePlayer(server.getPlayer(plr));
+            for (Player plr : getPlayersInTeam(teams.innos)) {
+                teams.innos.removePlayer(plr);
             }
-            for (String plr : teams.dets.getEntries()) {
-                teams.dets.removePlayer(server.getPlayer(plr));
+            for (Player plr : getPlayersInTeam(teams.dets)) {
+                teams.dets.removePlayer(plr);
             }
-            for (String plr : teams.sabs.getEntries()) {
-                teams.sabs.removePlayer(server.getPlayer(plr));
+            for (Player plr : getPlayersInTeam(teams.sabs)) {
+                teams.sabs.removePlayer(plr);
             }
             sabs.clear();
             dets.clear();
