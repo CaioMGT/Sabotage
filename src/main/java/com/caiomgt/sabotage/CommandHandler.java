@@ -37,6 +37,7 @@ public class CommandHandler implements CommandExecutor {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        // It's kind of weird how sendMessage isn't deprecated...
         if (command.getName().equals("forcestart")) {
             if (checkPerms(sender, false)) {
                 Player plr = (Player) sender;

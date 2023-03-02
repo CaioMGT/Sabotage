@@ -4,6 +4,7 @@ import com.caiomgt.sabotage.EndType;
 import com.caiomgt.sabotage.GameManager;
 import com.caiomgt.sabotage.SaveManager;
 import com.caiomgt.sabotage.teams;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -83,7 +84,7 @@ public class PlayerDie implements Listener {
             // game end
             manager.End(event.getPlayer().getWorld());
         } else {
-            Bukkit.getServer().broadcastMessage(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain");
+            Bukkit.getServer().broadcast(Component.text(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain"));
         }
         if (manager.gameStarted) {
             plr.setGameMode(GameMode.SPECTATOR);
