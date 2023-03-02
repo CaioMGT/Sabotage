@@ -1,7 +1,8 @@
 package com.caiomgt.sabotage;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class GameManager {
         if (world.getPlayerCount() >= 2) {
             gracePeriod = true;
             gameStarted = true;
-            server.broadcastMessage("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.");
+            server.broadcast(Component.text("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.", NamedTextColor.YELLOW));
             Objective sidebar = teams.sidebar;
             sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
             BukkitScheduler scheduler = Bukkit.getScheduler();
@@ -97,10 +98,16 @@ public class GameManager {
     public void End(World world) {
         EndType endType = checkEnd();
         if (!(endType == EndType.NONE) && gameStarted) {
-            server.broadcastMessage("The game has ended! The following players were the saboteurs: " + ChatColor.RED + getPlayerNamesInList(sabs));
+            server.broadcast(Component.text().content("The game has ended! The following players were the saboteurs: ")
+                    .append(Component.text(getPlayerNamesInList(sabs), NamedTextColor.RED))
+                    .build());
             if (endType == EndType.INNOCENTS) {
                 // Award karma to surviving innocents
-                server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.GREEN + "Innocents" + ChatColor.RESET + "and 50 Karma to surviving " + ChatColor.BLUE + "Detectives");
+                server.broadcast(Component.text().content("Awarding 20 Karma to surviving ")
+                        .append(Component.text("Innocents", NamedTextColor.GREEN)
+                                .append(Component.text("and 50 Karma to surviving ")
+                                        .append(Component.text("Detectives", NamedTextColor.BLUE))))
+                        .build());
                 for (String plr : teams.innos.getEntries()) {
                     saves.addKarma(server.getPlayer(plr), 20);
                 }
@@ -109,7 +116,7 @@ public class GameManager {
                 }
             } else {
                 // Award karma to surviving saboteurs
-                server.broadcastMessage("Awarding 20 Karma to surviving " + ChatColor.RED + "Saboteurs");
+                server.broadcast(Component.text().content("Awarding 20 Karma to surviving ").append(Component.text("Saboteurs", NamedTextColor.RED)).build());
                 for (String plr : teams.sabs.getEntries()) {
                     saves.addKarma(server.getPlayer(plr), 20);
                 }

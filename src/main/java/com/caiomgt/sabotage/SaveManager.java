@@ -55,7 +55,7 @@ public class SaveManager {
     public void setKarma(Player plr, int karma) {
         UUID uuid = plr.getUniqueId();
         plrData.get(uuid).karma = karma;
-        plr.setLevel((karma >= 0 ? karma : 0));
+        plr.setLevel(Math.max(0, karma));
     }
     public int getKarma(Player plr) {
         UUID uuid = plr.getUniqueId();
