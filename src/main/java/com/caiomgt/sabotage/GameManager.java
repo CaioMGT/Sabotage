@@ -112,8 +112,8 @@ public class GameManager {
             if (endType == EndType.INNOCENTS) {
                 // Award karma to surviving innocents
                 server.broadcast(Component.text().content("Awarding 20 Karma to surviving ")
-                        .append(Component.text("Innocents", NamedTextColor.GREEN)
-                                .append(Component.text("and 50 Karma to surviving ")
+                        .append(Component.text("Innocents ", NamedTextColor.GREEN)
+                                .append(Component.text("and 50 Karma to surviving ", NamedTextColor.WHITE)
                                         .append(Component.text("Detectives", NamedTextColor.BLUE))))
                         .build());
                 for (Player plr : getPlayersInTeam(teams.innos)) {
