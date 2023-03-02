@@ -26,6 +26,7 @@ public class PlayerChat implements Listener {
     }
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+        // I'll leave this for a different pr, requires some restructuring to transition to components
         Player plr = event.getPlayer();
         Team plrTeam = plr.getScoreboard().getEntityTeam(plr);
         if (manager.gameStarted && !manager.gracePeriod){

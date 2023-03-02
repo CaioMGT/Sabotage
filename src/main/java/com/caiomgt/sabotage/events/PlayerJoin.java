@@ -25,11 +25,7 @@ public class PlayerJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Data data = saveManager.load(event.getPlayer());
-        if (!data.success) {
-            event.getPlayer().kickPlayer("Could not get data, sorry.");
-        } else {
-            event.getPlayer().setLevel(Math.max(data.karma, 0));
-        }
+        event.getPlayer().setLevel(Math.max(data.karma, 0));
     }
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
