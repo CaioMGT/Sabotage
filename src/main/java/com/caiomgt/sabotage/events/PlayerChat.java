@@ -38,26 +38,33 @@ public class PlayerChat implements Listener {
         event.renderer(new ChatRenderer() {
             @Override
             public @NotNull Component render(@NotNull Player player, @NotNull Component component, @NotNull Component message, @NotNull Audience audience) {
+                NamedTextColor colorText;
                 if (manager.gameStarted && !manager.gracePeriod) {
                     if (audience instanceof Player) {
                         Player audiencePlr = (Player) audience;
-                        NamedTextColor color;
                         if (audiencePlr.getScoreboard().getEntityTeam(audiencePlr).equals(Teams.sabs)) {
                             if (plrTeam.equals(Teams.sabs)) {
-                                color = NamedTextColor.RED;
+                                colorText = NamedTextColor.RED;
                             } else if (plrTeam.equals(Teams.dets)) {
-                                color = NamedTextColor.DARK_BLUE;
+                                colorText = NamedTextColor.DARK_BLUE;
                             } else {
-                                color = NamedTextColor.GREEN;
+                                colorText = NamedTextColor.GREEN;
                             }
                         } else {
-                            color = NamedTextColor.YELLOW;
+                            colorText = NamedTextColor.YELLOW;
                         }
-                        plugin.getServer().getConsoleSender().sendMessage(audiencePlr.getName() + " has received message with color " + color.toString() + " with sender team " + plrTeam.getName() + ", receiver team is " + audiencePlr.getScoreboard().getEntityTeam(audiencePlr).getName());
-                        return message.color(color);
+                        plugin.getServer().getConsoleSender().sendMessage(audiencePlr.getName() + " has received message with color " + colorText + " with sender team " + plrTeam.getName() + ", receiver team is " + audiencePlr.getScoreboard().getEntityTeam(audiencePlr).getName());
+                        return Component.text()
+                                .color(colorText)
+                                .content("<" + player.getName() + "> ")
+                                .append(event.message().color(NamedTextColor.WHITE))
+                                .build();
                     }
                 }
-                return message;
+                return Component.text()
+                        .content("<" + player.getName() + "> ")
+                        .append(event.message())
+                        .build();
             }
         });
         if (manager.gameStarted && !manager.gracePeriod){
