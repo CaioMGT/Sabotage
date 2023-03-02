@@ -6,6 +6,7 @@ import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -37,17 +38,30 @@ public class PlayerChat implements Listener {
         event.renderer(new ChatRenderer() {
             @Override
             public @NotNull Component render(@NotNull Player player, @NotNull Component component, @NotNull Component message, @NotNull Audience audience) {
-                if (audience.getClass() == Player.class) {
-                    Player audiencePlr = (Player) audience;
-                    if (audiencePlr.getScoreboard().getEntityTeam(audiencePlr) == Teams.sabs) {
-                        event.message().
+                if (manager.gameStarted && !manager.gracePeriod) {
+                    if (audience instanceof Player) {
+                        Player audiencePlr = (Player) audience;
+                        NamedTextColor color;
+                        if (audiencePlr.getScoreboard().getEntityTeam(audiencePlr).equals(Teams.sabs)) {
+                            if (plrTeam.equals(Teams.sabs)) {
+                                color = NamedTextColor.RED;
+                            } else if (plrTeam.equals(Teams.dets)) {
+                                color = NamedTextColor.DARK_BLUE;
+                            } else {
+                                color = NamedTextColor.GREEN;
+                            }
+                        } else {
+                            color = NamedTextColor.YELLOW;
+                        }
+                        plugin.getServer().getConsoleSender().sendMessage(audiencePlr.getName() + " has received message with color " + color.toString() + " with sender team " + plrTeam.getName() + ", receiver team is " + audiencePlr.getScoreboard().getEntityTeam(audiencePlr).getName());
+                        return message.color(color);
                     }
                 }
                 return message;
             }
         });
         if (manager.gameStarted && !manager.gracePeriod){
-            if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
+            /*if (!(plrTeam == null) && plrTeam.equals(Teams.dets)) {
                 event.setFormat(ChatColor.BLUE + "<%s> " + ChatColor.RESET + "%s");
             } else {
                 Set<Player> sabs = manager.getPlayersInTeam(Teams.sabs);
@@ -64,7 +78,7 @@ public class PlayerChat implements Listener {
                     }
                     sab.getPlayer().sendMessage(color + "<" + plr.getName() + "> " + ChatColor.RESET + event.getMessage());
                 }
-            }
+            }*/
         }
     }
 }

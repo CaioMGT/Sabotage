@@ -33,6 +33,7 @@ public class GameManager {
     }
     public boolean Start(World world) {
         if (world.getPlayerCount() >= 2) {
+            server.getConsoleSender().sendMessage("Starting game");
             gracePeriod = true;
             gameStarted = true;
             server.broadcast(Component.text("The game has started! You have 30 seconds to collect items, gear, or hide. Your roles will be selected after the grace period.", NamedTextColor.YELLOW));
@@ -104,6 +105,7 @@ public class GameManager {
     public void End(World world) {
         EndType endType = checkEnd();
         if (!(endType == EndType.NONE) && gameStarted) {
+            server.getConsoleSender().sendMessage("Ending game");
             server.broadcast(Component.text().content("The game has ended! The following players were the saboteurs: ")
                     .append(Component.text(getPlayerNamesInList(sabs), NamedTextColor.RED))
                     .build());
