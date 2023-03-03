@@ -77,6 +77,11 @@ public class PlayerDie implements Listener {
                 plugin.getServer().getConsoleSender().sendMessage(plr.getName() + " was killed by " + killer.getName());
             }
         }
+        // I need to do this before the game ends, else it won't cancel the event
+        if (manager.gameStarted) {
+            plr.setGameMode(GameMode.SPECTATOR);
+            event.setCancelled(true);
+        }
         if (!(team == null)) {
             team.removePlayer(plr);
         }
@@ -86,9 +91,6 @@ public class PlayerDie implements Listener {
         } else {
             Bukkit.getServer().broadcast(Component.text(plr.getName() + " has died. " + this.teams.innos.getEntries().size() + " players remain"));
         }
-        if (manager.gameStarted) {
-            plr.setGameMode(GameMode.SPECTATOR);
-            event.setCancelled(true);
-        }
+
     }
 }
