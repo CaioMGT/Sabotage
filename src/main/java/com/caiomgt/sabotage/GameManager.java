@@ -66,13 +66,66 @@ public class GameManager {
                 int detCount = plrs.size() / 8;
                 for (Player plr : plrs) {
                     if (detCount >= 1) {
+                        plr.sendMessage(Component.text().content("You are a ")
+                                        .append(Component.text("Detective.", NamedTextColor.BLUE))
+                                        .appendNewline()
+                                        .append(Component.text("Test suspicious people with your shears to detect if they're a Saboteur and help your fellow "))
+                                        .append(Component.text("Innocents ", NamedTextColor.GREEN))
+                                        .append(Component.text("to kill all "))
+                                        .append(Component.text("Saboteurs.", NamedTextColor.RED))
+                                .build()
+                        );
                         detCount--;
                         AddDet(plr);
                     } else if (sabCount >= 1) {
+                        plr.sendMessage(Component.text().content("You are a ")
+                                        .append(Component.text("Saboteur.", NamedTextColor.RED))
+                                        .appendNewline()
+                                        .append(Component.text("Kill all "))
+                                        .append(Component.text("Innocents ", NamedTextColor.GREEN))
+                                        .append(Component.text("and "))
+                                        .append(Component.text("Detectives ", NamedTextColor.BLUE))
+                                        .append(Component.text("to win. Work as a team with your fellow "))
+                                        .append(Component.text("Saboteurs ", NamedTextColor.RED))
+                                        .append(Component.text("to arrange traps and kill without being caught"))
+                                .build()
+                        );
                         sabCount--;
                         AddSab(plr);
                     } else {
+                        plr.sendMessage(Component.text().content("You are a ")
+                                        .append(Component.text("Innocent", NamedTextColor.GREEN))
+                                        .appendNewline()
+                                        .append(Component.text("Figure out who the "))
+                                        .append(Component.text("Saboteurs ", NamedTextColor.RED))
+                                        .append(Component.text("are to win. Work with the "))
+                                        .append(Component.text("Detective(s) ", NamedTextColor.BLUE))
+                                        .append(Component.text("to rule out "))
+                                        .append(Component.text("Innocents ", NamedTextColor.GREEN))
+                                        .append(Component.text("and eliminate all "))
+                                        .append(Component.text("Saboteurs.", NamedTextColor.RED))
+                                .build()
+                        );
                         AddInno(plr);
+                    }
+                }
+                String detectives = getPlayerNamesInList(getPlayersInTeam(teams.dets));
+                String saboteurs = getPlayerNamesInList(getPlayersInTeam(teams.sabs));
+                if (teams.dets.getSize() == 0) {
+                    for (Player plr : getPlayersInTeam(teams.sabs)) {
+                        plr.sendMessage(Component.text().content("The ").append(Component.text("Saboteurs ", NamedTextColor.RED)).append(Component.text("are ")).append(Component.text(saboteurs, NamedTextColor.RED)).build());
+                    }
+                }
+                else {
+                    for (Player plr : getPlayersInTeam(teams.dets)) {
+                        plr.sendMessage(Component.text().content("The ").append(Component.text("Detectives ", NamedTextColor.BLUE)).append(Component.text("are ")).append(Component.text(detectives, NamedTextColor.BLUE)).build());
+                    }
+                    for (Player plr : getPlayersInTeam(teams.innos)) {
+                        plr.sendMessage(Component.text().content("The ").append(Component.text("Detectives ", NamedTextColor.BLUE)).append(Component.text("are ")).append(Component.text(detectives, NamedTextColor.BLUE)).build());
+                    }
+                    for (Player plr : getPlayersInTeam(teams.sabs)) {
+                        plr.sendMessage(Component.text().content("The ").append(Component.text("Saboteurs ", NamedTextColor.RED)).append(Component.text("are ")).append(Component.text(saboteurs, NamedTextColor.RED)).build());
+                        plr.sendMessage(Component.text().content("The ").append(Component.text("Detectives ", NamedTextColor.BLUE)).append(Component.text("are ")).append(Component.text(detectives, NamedTextColor.BLUE)).build());
                     }
                 }
             }, 20 * 30);
@@ -89,6 +142,13 @@ public class GameManager {
         return EndType.NONE;
     }
     String getPlayerNamesInList(List<Player> list){
+        String result = "";
+        for (Player plr : list){
+            result = result + plr.getName() + " ";
+        }
+        return result;
+    }
+    String getPlayerNamesInList(Set<Player> list){
         String result = "";
         for (Player plr : list){
             result = result + plr.getName() + " ";

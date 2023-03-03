@@ -33,7 +33,7 @@ public class PlayerChat implements Listener {
                         if (plrTeam.equals(Teams.sabs)) {
                             colorText = NamedTextColor.RED;
                         } else if (plrTeam.equals(Teams.dets)) {
-                            colorText = NamedTextColor.DARK_BLUE;
+                            colorText = NamedTextColor.BLUE;
                         } else {
                             colorText = NamedTextColor.GREEN;
                         }
