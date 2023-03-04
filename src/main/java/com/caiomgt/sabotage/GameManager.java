@@ -2,6 +2,7 @@ package com.caiomgt.sabotage;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -66,6 +67,7 @@ public class GameManager {
                 int detCount = plrs.size() / 8;
                 for (Player plr : plrs) {
                     if (detCount >= 1) {
+                        // Detective
                         plr.sendMessage(Component.text().content("You are a ")
                                         .append(Component.text("Detective.", NamedTextColor.BLUE))
                                         .appendNewline()
@@ -75,9 +77,11 @@ public class GameManager {
                                         .append(Component.text("Saboteurs.", NamedTextColor.RED))
                                 .build()
                         );
+                        plr.showTitle(Title.title(Component.text("You are a Detective", NamedTextColor.BLUE), Component.empty()));
                         detCount--;
                         AddDet(plr);
                     } else if (sabCount >= 1) {
+                        // Saboteur
                         plr.sendMessage(Component.text().content("You are a ")
                                         .append(Component.text("Saboteur.", NamedTextColor.RED))
                                         .appendNewline()
@@ -90,9 +94,11 @@ public class GameManager {
                                         .append(Component.text("to arrange traps and kill without being caught"))
                                 .build()
                         );
+                        plr.showTitle(Title.title(Component.text("You are a Saboteur", NamedTextColor.RED), Component.empty()));
                         sabCount--;
                         AddSab(plr);
                     } else {
+                        // Innocent
                         plr.sendMessage(Component.text().content("You are a ")
                                         .append(Component.text("Innocent", NamedTextColor.GREEN))
                                         .appendNewline()
@@ -106,6 +112,7 @@ public class GameManager {
                                         .append(Component.text("Saboteurs.", NamedTextColor.RED))
                                 .build()
                         );
+                        plr.showTitle(Title.title(Component.text("You are an Innocent", NamedTextColor.GREEN), Component.empty()));
                         AddInno(plr);
                     }
                 }
