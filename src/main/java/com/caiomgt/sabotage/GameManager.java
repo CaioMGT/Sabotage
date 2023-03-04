@@ -3,9 +3,7 @@ package com.caiomgt.sabotage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -78,6 +76,10 @@ public class GameManager {
                                 .build()
                         );
                         plr.showTitle(Title.title(Component.text("You are a Detective", NamedTextColor.BLUE), Component.empty()));
+                        plr.playNote(plr.getLocation(), Instrument.PLING, Note.sharp(1, Note.Tone.C));
+                        scheduler.runTaskLater(plugin, () -> {
+                            plr.playNote(plr.getLocation(), Instrument.PLING, Note.sharp(1, Note.Tone.E));
+                        }, 10);
                         detCount--;
                         AddDet(plr);
                     } else if (sabCount >= 1) {
@@ -95,6 +97,10 @@ public class GameManager {
                                 .build()
                         );
                         plr.showTitle(Title.title(Component.text("You are a Saboteur", NamedTextColor.RED), Component.empty()));
+                        plr.playNote(plr.getLocation(), Instrument.PLING, Note.sharp(1, Note.Tone.C));
+                        scheduler.runTaskLater(plugin, () -> {
+                            plr.playNote(plr.getLocation(), Instrument.PLING, Note.sharp(0, Note.Tone.B));
+                        }, 10);
                         sabCount--;
                         AddSab(plr);
                     } else {
@@ -113,6 +119,7 @@ public class GameManager {
                                 .build()
                         );
                         plr.showTitle(Title.title(Component.text("You are an Innocent", NamedTextColor.GREEN), Component.empty()));
+                        plr.playNote(plr.getLocation(), Instrument.PLING, Note.sharp(1, Note.Tone.C));
                         AddInno(plr);
                     }
                 }

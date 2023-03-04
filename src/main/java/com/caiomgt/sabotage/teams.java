@@ -25,9 +25,9 @@ public class teams {
         dets.color(NamedTextColor.BLUE);
     }
     public void cleanup(){
+        sidebar.unregister();
         sabs.unregister();
         dets.unregister();
         innos.unregister();
-        sidebar.unregister();
     }
 }
